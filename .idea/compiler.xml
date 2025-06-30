@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile default="true" name="Default" enabled="true" />
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="api-gateway" />
+        <module name="config-server" />
+        <module name="service-registry" />
+      </profile>
+      <profile name="Annotation profile for payment" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="false">
+          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.38/lombok-1.18.38.jar" />
+        </processorPath>
+        <module name="hotelbooking" />
+        <module name="flight-booking" />
+        <module name="booking" />
+        <module name="review1" />
+        <module name="SupportTicket" />
+        <module name="payment" />
+        <module name="travelpackage" />
+        <module name="authentication" />
+      </profile>
+      <profile name="Annotation profile for payment (1)" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="false">
+          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.38/lombok-1.18.38.jar" />
+          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.38/lombok-1.18.38.jar" />
+        </processorPath>
+        <module name="payment (1)" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="department-service" target="21" />
+    </bytecodeTargetLevel>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="SupportTicket" options="-parameters" />
+      <module name="api-gateway" options="-parameters" />
+      <module name="authentication" options="-parameters" />
+      <module name="booking" options="-parameters" />
+      <module name="config-server" options="-parameters" />
+      <module name="department-service" options="-parameters" />
+      <module name="flight-booking" options="-parameters" />
+      <module name="hotelbooking" options="-parameters" />
+      <module name="payment" options="-parameters" />
+      <module name="payment (1)" options="-parameters" />
+      <module name="review1" options="-parameters" />
+      <module name="service-registry" options="-parameters" />
+      <module name="travelpackage" options="-parameters" />
+    </option>
+  </component>
+</project>
