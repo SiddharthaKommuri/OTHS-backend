@@ -1,8 +1,11 @@
 package com.cts.booking.service.impl;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.cts.booking.client.PaymentClient;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,10 +29,12 @@ public class BookingServiceImpl implements BookingService {
 	BookingRepository bookingRepo;
 	ModelMapper mapper;
 	private static final Logger logger = LoggerFactory.getLogger(BookingServiceImpl.class);
+	private final PaymentClient paymentClient;
 
-	public BookingServiceImpl(BookingRepository bookingRepo, ModelMapper mapper) {
+	public BookingServiceImpl(BookingRepository bookingRepo, ModelMapper mapper,PaymentClient paymentClient) {
 		this.bookingRepo = bookingRepo;
 		this.mapper = mapper;
+		this.paymentClient=paymentClient;
 	}
 
 	// entity to dto
@@ -167,5 +172,25 @@ public class BookingServiceImpl implements BookingService {
 	    return PaginationUtils.buildBookingResponse(bookingsPage, this::mapToDto);
 	}
 
+	@Override
+	public BookingDto cancelBooking(Long bookingId) {
+		Booking booking = bookingRepo.findById(bookingId)
+				.orElseThrow(() -> new RuntimeException("Booking not found"));
+
+		LocalDateTime now = LocalDateTime.now();
+		Duration duration = Duration.between(booking.getCreatedAt(), now);
+
+		if (duration.toHours() <= 12) {
+			booking.setStatus("cancelled");
+			bookingRepo.save(booking);
+
+			// Call Payment Service via Feign
+			paymentClient.cancelPayment(booking.getPaymentId());
+
+			return mapToDto(booking);
+		} else {
+			return mapToDto(booking);
+		}
+	}
 
 }

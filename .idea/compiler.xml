@@ -17,29 +17,29 @@
         <outputRelativeToContentRoot value="true" />
         <processorPath useClasspath="false">
           <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.38/lombok-1.18.38.jar" />
+          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.38/lombok-1.18.38.jar" />
+        </processorPath>
+        <module name="payment (1)" />
+      </profile>
+      <profile name="Annotation profile for travelpackage" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="false">
+          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.38/lombok-1.18.38.jar" />
         </processorPath>
         <module name="hotelbooking" />
         <module name="flight-booking" />
         <module name="booking" />
         <module name="review1" />
         <module name="SupportTicket" />
-        <module name="payment" />
         <module name="travelpackage" />
         <module name="authentication" />
-      </profile>
-      <profile name="Annotation profile for payment (1)" enabled="true">
-        <sourceOutputDir name="target/generated-sources/annotations" />
-        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
-        <outputRelativeToContentRoot value="true" />
-        <processorPath useClasspath="false">
-          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.38/lombok-1.18.38.jar" />
-          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.38/lombok-1.18.38.jar" />
-        </processorPath>
-        <module name="payment (1)" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="department-service" target="21" />
+      <module name="payment" target="21" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">

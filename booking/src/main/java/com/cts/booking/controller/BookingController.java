@@ -44,8 +44,8 @@ public class BookingController {
      * @param pageSize the number of records per page
      * @param sortBy   the field to sort by
      * @param sortDir  the direction of sorting (asc/desc)
-     * @return paginated list of bookings
-     */
+* @return paginated list of bookings
+*/
 
 	@GetMapping
 	public ResponseEntity<BookingResponseDto> getAllBookings(
@@ -182,6 +182,13 @@ public class BookingController {
 	    BookingResponseDto response = bookingService.getActiveBookings(pageNo, pageSize, sortBy, sortDir);
 	    return ResponseEntity.ok(response);
 	}
+
+
+	@PutMapping("/{bookingId}/cancel")
+	public ResponseEntity<BookingDto> cancelBooking(@PathVariable Long bookingId) {
+		return ResponseEntity.ok(bookingService.cancelBooking(bookingId));
+	}
+
 }
 
 

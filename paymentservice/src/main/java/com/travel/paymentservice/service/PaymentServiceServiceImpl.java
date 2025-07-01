@@ -86,4 +86,16 @@ public class PaymentServiceServiceImpl {
                 .paymentDate(payment.getPaymentDate())
                 .build();
     }
+
+
+    public PaymentServiceDTO cancelPayment(Long paymentId) {
+        PaymentServiceEntity payment = paymentRepository.findById(paymentId)
+                .orElseThrow(() -> new RuntimeException("Payment not found"));
+
+        payment.setStatus("cancelled");
+        paymentRepository.save(payment);
+
+        return mapPaymentToDTO(payment);
+    }
+
 }

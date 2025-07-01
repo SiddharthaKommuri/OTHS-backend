@@ -23,4 +23,5 @@ public interface BookingService {
 	BookingResponseDto getBookingsByStatus(String status, int pageNo, int pageSize, String sortBy, String sortDir);
 	BookingResponseDto getActiveBookings(int pageNo, int pageSize, String sortBy, String sortDir);
 
+	BookingDto cancelBooking(Long bookingId);
 }

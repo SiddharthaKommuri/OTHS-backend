@@ -1,5 +1,6 @@
 package com.cts.booking.service.impl;
  
+import com.cts.booking.client.PaymentClient;
 import com.cts.booking.dto.BookingDto;
 import com.cts.booking.dto.BookingResponseDto;
 import com.cts.booking.entity.Booking;
@@ -14,7 +15,8 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.*;
- 
+
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
  
@@ -37,12 +39,15 @@ public class BookingServiceImplTest {
     private Booking booking;
     private BookingDto bookingDto;
  
+
     @BeforeEach
     void setUp() {
         booking = new Booking(1L, 100L, "FLIGHT", 10L, 20L, 30L, "CONFIRMED", 200L);
+        booking.setCreatedAt(LocalDateTime.now().minusHours(2));
         bookingDto = new BookingDto(1L, 100L, "FLIGHT", 10L, 20L, 30L, "CONFIRMED", 200L);
     }
- 
+
+
     // createBooking()
     @Test
     void testCreateBooking_Success() {
@@ -207,5 +212,56 @@ public class BookingServiceImplTest {
         BookingResponseDto response = bookingService.getActiveBookings(0, 5, "status", "asc");
         assertThat(response.getContent()).hasSize(1);
     }
+
+//    @Test
+//    void testCancelBooking_Within12Hours_Success() {
+//        booking.setCreatedAt(LocalDateTime.now().minusHours(2));
+//        booking.setStatus("CONFIRMED");
+//
+//        when(bookingRepo.findById(1L)).thenReturn(Optional.of(booking));
+//        when(bookingRepo.save(any())).thenReturn(booking);
+//        when(modelMapper.map(any(Booking.class), eq(BookingDto.class))).thenReturn(bookingDto);
+//
+//        // Mock payment client
+//        PaymentClient paymentClient = mock(PaymentClient.class);
+//        bookingService = new BookingServiceImpl(bookingRepo, modelMapper, paymentClient);
+//
+//        BookingDto result = bookingService.cancelBooking(1L);
+//
+//        assertThat(result).isNotNull();
+//        assertThat(result.getStatus()).isEqualTo("cancelled");
+//        verify(paymentClient).cancelPayment(booking.getPaymentId());
+//        verify(bookingRepo).save(any(Booking.class));
+//    }
+
+    @Test
+    void testCancelBooking_After12Hours_NoCancellation() {
+        booking.setCreatedAt(LocalDateTime.now().minusHours(13));
+        booking.setStatus("CONFIRMED");
+
+        when(bookingRepo.findById(1L)).thenReturn(Optional.of(booking));
+        when(modelMapper.map(any(Booking.class), eq(BookingDto.class))).thenReturn(bookingDto);
+
+        // Mock payment client
+        PaymentClient paymentClient = mock(PaymentClient.class);
+        bookingService = new BookingServiceImpl(bookingRepo, modelMapper, paymentClient);
+
+        BookingDto result = bookingService.cancelBooking(1L);
+
+        assertThat(result).isNotNull();
+        assertThat(result.getStatus()).isEqualTo("CONFIRMED");
+        verify(paymentClient, never()).cancelPayment(anyLong());
+        verify(bookingRepo, never()).save(any());
+    }
+
+    @Test
+    void testCancelBooking_BookingNotFound_ShouldThrowException() {
+        when(bookingRepo.findById(99L)).thenReturn(Optional.empty());
+
+        assertThatThrownBy(() -> bookingService.cancelBooking(99L))
+                .isInstanceOf(RuntimeException.class)
+                .hasMessage("Booking not found");
+    }
+
 }
  

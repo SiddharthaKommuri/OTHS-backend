@@ -151,4 +151,3 @@ class BookingControllerTest {
                .andExpect(status().isOk());
     }
 }
- 
