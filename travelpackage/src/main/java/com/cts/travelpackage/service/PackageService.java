@@ -16,4 +16,7 @@ public interface PackageService {
 	
 	public TravelPackageDto updatePackageById(Long id,TravelPackageDto travelPackageDto);
 
+	public Long getTotalPackageCount();
+
+	public void deletePackageById(Long id);
 }
