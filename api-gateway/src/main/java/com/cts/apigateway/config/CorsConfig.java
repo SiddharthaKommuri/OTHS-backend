@@ -16,7 +16,7 @@ public class CorsConfig {
     public CorsWebFilter corsWebFilter() {
         CorsConfiguration corsConfig = new CorsConfiguration();
         // **IMPORTANT**: Replace with your actual frontend origin(s)
-        corsConfig.setAllowedOrigins(Arrays.asList("http://localhost:3000", "https://your-frontend-domain.com"));
+        corsConfig.setAllowedOrigins(Arrays.asList("http://localhost:3000", "http://localhost:5173"));
         corsConfig.setMaxAge(3600L);
         corsConfig.addAllowedMethod("*"); // Allow all methods (GET, POST, PUT, DELETE, OPTIONS, etc.)
         corsConfig.addAllowedHeader("*"); // Allow all headers
