@@ -48,7 +48,7 @@ public class FlightControllerTest {
 
         // tell mock to throw the exception
         when(flightService.addFlight(flight, "User"))
-            .thenThrow(new RuntimeException("Access denied: Only Admin can manage flight details"));
+                .thenThrow(new RuntimeException("Access denied: Only Admin can manage flight details"));
 
         Exception exception = assertThrows(RuntimeException.class, () ->flightController.addFlight(flight, "User"));
 
@@ -102,7 +102,7 @@ public class FlightControllerTest {
 
         when(flightService.getFlight(1)).thenReturn(flight);
 
-        Flight result = flightController.getFlight(1);
+        Flight result = flightController.getFlightById(1);
         assertNotNull(result);
         assertEquals(1, result.getFlightId());
     }
@@ -111,7 +111,7 @@ public class FlightControllerTest {
     public void testGetFlightById_Failure_NotFound() {
         when(flightService.getFlight(1)).thenThrow(new RuntimeException("Flight not found"));
 
-        Exception exception = assertThrows(RuntimeException.class, () ->flightController.getFlight(1));
+        Exception exception = assertThrows(RuntimeException.class, () ->flightController.getFlightById(1));
         assertEquals("Flight not found", exception.getMessage());
     }
 
@@ -123,7 +123,7 @@ public class FlightControllerTest {
 
         when(flightService.searchFlights("Delhi", "Mumbai")).thenReturn(List.of(flight));
 
-        List<Flight> results = flightController.search("Delhi", "Mumbai");
+        List<Flight> results = flightController.searchFlights("Delhi", "Mumbai");
         assertEquals(1, results.size());
         assertEquals("Mumbai", results.get(0).getArrival());
     }
@@ -132,7 +132,7 @@ public class FlightControllerTest {
     public void testSearchFlightsByLocation_Failure_NotFound() {
         when(flightService.searchFlights("Delhi", "Chandigarh")).thenThrow(new RuntimeException("No flights found"));
 
-        Exception exception = assertThrows(RuntimeException.class, () ->flightController.search("Delhi", "Chandigarh"));
+        Exception exception = assertThrows(RuntimeException.class, () ->flightController.searchFlights("Delhi", "Chandigarh"));
         assertEquals("No flights found", exception.getMessage());
     }
 }

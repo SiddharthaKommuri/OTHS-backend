@@ -29,8 +29,8 @@ public class SupportTicketServiceImpl implements SupportTicketService {
 		SupportTicket ticket = new SupportTicket();
 		ticket.setUserId(dto.getUserId());
 		ticket.setIssue(dto.getIssue());
-		ticket.setAssignedAgentId(dto.getAssignedAgentId() != null ? dto.getAssignedAgentId() : 0);
-		ticket.setStatus(SupportTicket.TicketStatus.PENDING);
+		ticket.setStatus(SupportTicket.TicketStatus.OPEN);
+		ticket.setTicketCategory(SupportTicket.TicketCategory.valueOf(dto.getTicketCategory().name()));
 		ticket.setCreatedAt(LocalDateTime.now());
 		ticket.setUpdatedAt(null);
 		SupportTicket savedTicket = repository.save(ticket);
@@ -61,15 +61,6 @@ public class SupportTicketServiceImpl implements SupportTicketService {
 		return repository.findByUserId(userId).stream().map(this::toResponseDTO).toList();
 	}
 
-	@Override
-	public List<SupportTicketResponseDTO> getTicketsByAssignedAgentId(int agentId) throws EntityNotFoundException {
-		logger.info("Fetching tickets assigned to agentId: {}", agentId);
-		List<SupportTicket> tickets = repository.findByAssignedAgentId(agentId);
-		if (tickets.isEmpty()) {
-			throw new EntityNotFoundException("agent not found with ID :" + agentId);
-		}
-		return repository.findByAssignedAgentId(agentId).stream().map(this::toResponseDTO).toList();
-	}
 
 	@Override
 	public List<SupportTicketResponseDTO> getTicketsByStatus(String status) {
@@ -79,37 +70,31 @@ public class SupportTicketServiceImpl implements SupportTicketService {
 	}
 
 	@Override
-	public SupportTicketResponseDTO updateTicketStatusAndAgent(int ticketId, SupportTicket.TicketStatus status,
-			Integer assignedAgentId) throws EntityNotFoundException {
-		logger.info("Updating ticket id: {} with status: {} and agentId: {}", ticketId, status, assignedAgentId);
+	public SupportTicketResponseDTO updateTicketStatusAndRemark(int ticketId, SupportTicket.TicketStatus status,
+																String remarks) throws EntityNotFoundException {
+		logger.info("Updating ticket id: {} with status: {} with remarks: {}", ticketId, status, remarks);
 		SupportTicket ticket = repository.findById(ticketId)
 				.orElseThrow(() -> new EntityNotFoundException("Ticket not found with id: " + ticketId));
 		ticket.setStatus(status);
-		ticket.setAssignedAgentId(assignedAgentId);
 		ticket.setUpdatedAt(LocalDateTime.now());
+		ticket.setRemarks(remarks);
 		return toResponseDTO(repository.save(ticket));
 	}
 
-	@Override
-	public SupportTicketResponseDTO updateTicketStatus(int ticketId, SupportTicket.TicketStatus status)
-			throws EntityNotFoundException {
-		logger.info("Updating ticket id: {} with status: {}", ticketId, status);
-		SupportTicket ticket = repository.findById(ticketId)
-				.orElseThrow(() -> new EntityNotFoundException("Ticket not found with id: " + ticketId));
-		ticket.setStatus(status);
-		ticket.setUpdatedAt(LocalDateTime.now());
-		return toResponseDTO(repository.save(ticket));
-	}
 
 	private SupportTicketResponseDTO toResponseDTO(SupportTicket ticket) {
 		SupportTicketResponseDTO dto = new SupportTicketResponseDTO();
 		dto.setTicketId(ticket.getTicketId());
 		dto.setUserId(ticket.getUserId());
 		dto.setIssue(ticket.getIssue());
+		dto.setRemarks(ticket.getRemarks());
+		dto.setTicketCategory(SupportTicketResponseDTO.TicketCategory.valueOf(ticket.getTicketCategory().name()));
 		dto.setStatus(SupportTicketResponseDTO.TicketStatus.valueOf(ticket.getStatus().name()));
-		dto.setAssignedAgentId(ticket.getAssignedAgentId());
 		dto.setCreatedAt(ticket.getCreatedAt());
 		dto.setUpdatedAt(ticket.getUpdatedAt());
 		return dto;
 	}
+
+
+
 }

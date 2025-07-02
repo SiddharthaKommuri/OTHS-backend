@@ -8,31 +8,13 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class SupportTicketRequestDTO {
-    private int userId;
-    private Integer assignedAgentId;
-    private String issue;
-	public int getUserId() {
-		return userId;
-	}
-	public void setUserId(int userId) {
-		this.userId = userId;
-	}
-	public Integer getAssignedAgentId() {
-		return assignedAgentId;
-	}
-	public void setAssignedAgentId(Integer assignedAgentId) {
-		this.assignedAgentId = assignedAgentId;
-	}
-	public String getIssue() {
-		return issue;
-	}
-	public void setIssue(String issue) {
-		this.issue = issue;
-	}
-	
+	private int userId;
+	private String issue;
+	private String remarks;
+	private TicketCategory ticketCategory;
 
+	public enum TicketCategory {
+		HOTEL, FLIGHT, PACKAGE, OTHER
+	}
 
-   
 }
-
-

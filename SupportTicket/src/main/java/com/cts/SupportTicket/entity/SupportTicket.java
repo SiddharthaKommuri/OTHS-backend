@@ -18,85 +18,44 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Data
 public class SupportTicket {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int ticketId;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private int ticketId;
 
-    @Column(nullable = false)
-    private int userId;
+	@Column(nullable = false)
+	private int userId;
 
-    @Column(nullable = false, length = 1000)
-    private String issue;
+	@Column(nullable = false, length = 1000)
+	private String issue;
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private TicketStatus status = TicketStatus.PENDING;
+	@Enumerated(EnumType.STRING)
+	@Column(nullable = false)
+	private TicketCategory ticketCategory;
 
-    private int assignedAgentId; 
+	//@Column(nullable = false, length = 100)
+	private String remarks;
 
-    public int getTicketId() {
-		return ticketId;
-	}
-
-	public void setTicketId(int ticketId) {
-		this.ticketId = ticketId;
-	}
-
-	public int getUserId() {
-		return userId;
-	}
-
-	public void setUserId(int userId) {
-		this.userId = userId;
-	}
-
-	public String getIssue() {
-		return issue;
-	}
-
-	public void setIssue(String issue) {
-		this.issue = issue;
-	}
-
-	public TicketStatus getStatus() {
-		return status;
-	}
-
-	public void setStatus(TicketStatus status) {
-		this.status = status;
-	}
-
-	public int getAssignedAgentId() {
-		return assignedAgentId;
-	}
-
-	public void setAssignedAgentId(int assignedAgentId) {
-		this.assignedAgentId = assignedAgentId;
-	}
-
-	public LocalDateTime getCreatedAt() {
-		return createdAt;
-	}
-
-	public void setCreatedAt(LocalDateTime createdAt) {
-		this.createdAt = createdAt;
-	}
-
-	public LocalDateTime getUpdatedAt() {
-		return updatedAt;
-	}
-
-	public void setUpdatedAt(LocalDateTime updatedAt) {
-		this.updatedAt = updatedAt;
-	}
+	@Enumerated(EnumType.STRING)
+	@Column(nullable = false)
+	private TicketStatus status = TicketStatus.OPEN;
 
 	@Column(nullable = false, updatable = false)
-    private LocalDateTime createdAt = LocalDateTime.now();
+	private LocalDateTime createdAt = LocalDateTime.now();
 
-    private LocalDateTime updatedAt;
+	private LocalDateTime updatedAt;
 
-    public enum TicketStatus {
-        PENDING,
-        COMPLETED
-    }
+	public enum TicketStatus {
+		OPEN,
+		IN_PROGRESS,
+		RESOLVED,
+	}
+
+	public enum TicketCategory {
+		HOTEL,
+		FLIGHT,
+		PACKAGE,
+		OTHER
+	}
+
+
 }
