@@ -11,13 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UpdateStatusRequestDTO {
-    private SupportTicket.TicketStatus status;
+	private SupportTicket.TicketStatus status;
+	private String remarks;
 
-	public SupportTicket.TicketStatus getStatus() {
-		return status;
-	}
-
-	public void setStatus(SupportTicket.TicketStatus status) {
-		this.status = status;
-	}
 }

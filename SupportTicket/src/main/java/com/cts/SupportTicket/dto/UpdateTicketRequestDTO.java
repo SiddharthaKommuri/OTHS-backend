@@ -10,20 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UpdateTicketRequestDTO {
-    public SupportTicket.TicketStatus getStatus() {
-		return status;
-	}
-	public void setStatus(SupportTicket.TicketStatus status) {
-		this.status = status;
-	}
-	public Integer getAssignedAgentId() {
-		return assignedAgentId;
-	}
-	public void setAssignedAgentId(Integer assignedAgentId) {
-		this.assignedAgentId = assignedAgentId;
-	}
 	private SupportTicket.TicketStatus status;
-    private Integer assignedAgentId;
+	private String remarks;
 
-  
 }

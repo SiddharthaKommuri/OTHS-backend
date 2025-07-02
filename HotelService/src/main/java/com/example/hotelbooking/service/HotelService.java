@@ -9,5 +9,6 @@ public interface HotelService {
     Hotel updateHotel(int hotelId, Hotel hotel, String role);
     void deleteHotel(int hotelId, String role);
     Hotel getHotelById(int hotelId);
+    List<Hotel> getAllHotels();
     List<Hotel> searchHotels(String location);
 }

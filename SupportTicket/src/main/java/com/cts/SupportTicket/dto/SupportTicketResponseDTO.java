@@ -13,14 +13,23 @@ public class SupportTicketResponseDTO {
     private int ticketId;
     private int userId;
     private TicketStatus status;
+    private TicketCategory ticketCategory;
     private String issue;
-	private int assignedAgentId;
+    private String remarks;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
-    
+
+    public enum TicketCategory {
+        HOTEL,
+        FLIGHT,
+        PACKAGE,
+        OTHER
+    }
+
     public enum TicketStatus {
-        PENDING,
-        COMPLETED
+        OPEN,
+        IN_PROGRESS,
+        RESOLVED,
     }
 
 

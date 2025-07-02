@@ -42,14 +42,25 @@ public class HotelServiceImpl implements HotelService {
     }
 
     @Override
+    public List<Hotel> getAllHotels() {
+        logger.info("Fetching all hotels from database");
+        List<Hotel> hotels = hotelRepository.findAll();
+        if (hotels.isEmpty()) {
+            logger.warn("No hotels found in the database");
+            throw new CustomException("No hotels available");
+        }
+        return hotels;
+    }
+
+    @Override
     public Hotel updateHotel(int hotelId, Hotel hotel, String role) {
         logger.info("Updating hotel with ID: {}", hotelId);
         ensureHotelManager(role);
         Hotel existing = hotelRepository.findById(hotelId)
-            .orElseThrow(() -> {
-                logger.error("Hotel not found with ID: {}", hotelId);
-                return new CustomException("Hotel not found");
-            });
+                .orElseThrow(() -> {
+                    logger.error("Hotel not found with ID: {}", hotelId);
+                    return new CustomException("Hotel not found");
+                });
         existing.setName(hotel.getName());
         existing.setLocation(hotel.getLocation());
         existing.setRoomsAvailable(hotel.getRoomsAvailable());
@@ -67,10 +78,10 @@ public class HotelServiceImpl implements HotelService {
         logger.info("Deleting hotel with ID: {}", hotelId);
         ensureHotelManager(role);
         Hotel hotel = hotelRepository.findById(hotelId)
-            .orElseThrow(() -> {
-                logger.error("Hotel not found with ID: {}", hotelId);
-                return new CustomException("Hotel not found");
-            });
+                .orElseThrow(() -> {
+                    logger.error("Hotel not found with ID: {}", hotelId);
+                    return new CustomException("Hotel not found");
+                });
         hotelRepository.delete(hotel);
         logger.info("Hotel deleted successfully with ID: {}", hotelId);
     }
@@ -79,10 +90,10 @@ public class HotelServiceImpl implements HotelService {
     public Hotel getHotelById(int hotelId) {
         logger.info("Fetching hotel with ID: {}", hotelId);
         return hotelRepository.findById(hotelId)
-            .orElseThrow(() -> {
-                logger.error("Hotel not found with ID: {}", hotelId);
-                return new CustomException("Hotel not found");
-            });
+                .orElseThrow(() -> {
+                    logger.error("Hotel not found with ID: {}", hotelId);
+                    return new CustomException("Hotel not found");
+                });
     }
 
     @Override
