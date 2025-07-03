@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import com.cts.travelpackage.dto.TravelPackageDto;
 import com.cts.travelpackage.dto.TravelPackageResponse;
 import com.cts.travelpackage.service.PackageService;
-import com.cts.travelpackage.util.AppConstants;
+import com.cts.travelpackage.util.AppConstants; // Assuming this is defined
 
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
@@ -15,31 +15,31 @@ import lombok.extern.slf4j.Slf4j;
 @RestController
 @RequestMapping("api/v1/packages")
 @Slf4j
-@CrossOrigin
+//@CrossOrigin
 public class PackageController {
 
 	private PackageService packageService;
-	
+
 	public PackageController( PackageService packageService) {
 		this.packageService = packageService;
 	}
-	
+
 
 	/**
 	 * Creates a new travel package.
+	 * Includes packageName, location, and price in the request body.
 	 *
-	 * @param travelpackageDto the travel package details
+	 * @param travelPackageDto the travel package details
 	 * @return the created travel package
 	 */
 	@PostMapping
-	public ResponseEntity<TravelPackageDto> createPackage( @RequestBody @Valid TravelPackageDto travelpackageDto) {
+	public ResponseEntity<TravelPackageDto> createPackage( @RequestBody @Valid TravelPackageDto travelPackageDto) {
 
-		log.info("Received request to create a new travel package");
-		return new ResponseEntity<>(packageService.createPackage(travelpackageDto),HttpStatus.CREATED);
-	
+		log.info("Received request to create a new travel package with name: '{}' and location: '{}'", travelPackageDto.getPackageName(), travelPackageDto.getLocation()); // Log location
+		return new ResponseEntity<>(packageService.createPackage(travelPackageDto),HttpStatus.CREATED);
+
 	}
-	
-	
+
 
 	/**
 	 * Retrieves all travel packages with pagination and sorting.
@@ -57,13 +57,12 @@ public class PackageController {
 			@RequestParam(value="sortBy", defaultValue=AppConstants.DEFAULT_SORT_BY,required = false) String sortBy,
 			@RequestParam(value="sortDir", defaultValue=AppConstants.DEFAULT_SORT_DIR,required = false) String sortDir
 
-			){
+	){
 		log.info("Fetching all travel packages - page: {}, size: {}, sortBy: {}, sortDir: {}",pageNo, pageSize, sortBy, sortDir);
 		return new ResponseEntity<>(packageService.getAllPackages(pageNo,pageSize,sortBy,sortDir),HttpStatus.OK);
-		
+
 	}
-	
-	
+
 
 	/**
 	 * Retrieves a travel package by its ID.
@@ -78,11 +77,11 @@ public class PackageController {
 
 		return ResponseEntity.ok(packageService.getPackageById(id));
 	}
-	
-	
+
 
 	/**
 	 * Updates a travel package by its ID.
+	 * The request body should include the updated package details, including location.
 	 *
 	 * @param id               the package ID
 	 * @param travelPackageDto the updated package details
@@ -96,5 +95,29 @@ public class PackageController {
 		TravelPackageDto response = packageService.updatePackageById(id, travelPackageDto);
 		return ResponseEntity.ok(response);
 	}
-	
+
+	/**
+	 * Retrieves the total count of travel packages.
+	 *
+	 * @return the total count of packages
+	 */
+	@GetMapping("/total") // NEW Endpoint
+	public ResponseEntity<Long> getTotalPackages() {
+		log.info("Received request to get total number of travel packages");
+		Long totalCount = packageService.getTotalPackageCount();
+		return ResponseEntity.ok(totalCount);
+	}
+
+	/**
+	 * Deletes a travel package by its ID.
+	 *
+	 * @param id the package ID to delete
+	 * @return a response indicating success or failure
+	 */
+	@DeleteMapping("/{id}") // NEW Endpoint
+	public ResponseEntity<String> deletePackageById(@PathVariable(name="id") Long id) {
+		log.info("Received request to delete travel package with ID: {}", id);
+		packageService.deletePackageById(id);
+		return new ResponseEntity<>("Travel package deleted successfully.", HttpStatus.OK);
+	}
 }

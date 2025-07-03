@@ -59,6 +59,20 @@ public class JwtUtil {
         return List.of();
     }
 
+    // New methods to extract additional claims
+    public Long extractUserId(String token) {
+        return extractClaim(token, claims -> claims.get("userId", Long.class));
+    }
+
+    public String extractName(String token) {
+        return extractClaim(token, claims -> claims.get("username", String.class));
+    }
+
+    public String extractContactNumber(String token) {
+        return extractClaim(token, claims -> claims.get("contactNumber", String.class));
+    }
+
+
     public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
         // FIX 3: Call the correct private method 'extractAllClaims'
         final Claims claims = extractAllClaims(token); // Corrected method call
@@ -74,7 +88,7 @@ public class JwtUtil {
             // In a real application, you might want to also validate roles if they are part of UserDetails for finer checks
             // For now, we rely on username and expiration.
             return (username!= null) && !username.isEmpty() && !isTokenExpired(token);
-            
+
         } catch (Exception e) {
             // Log specific JWT exceptions for debugging (e.g., ExpiredJwtException, SignatureException, MalformedJwtException)
             logger.warn("JWT validation failed for token: {}", e.getMessage()); // Using the logger
@@ -98,7 +112,7 @@ public class JwtUtil {
                 .parseClaimsJws(token) // For JJWT 0.12.x+, use .parseSignedClaims(token)
                 .getBody();
     }
-    
+
     public String getRoles(String token) {
         return extractAllClaims(token).get("roles", String.class);
     }

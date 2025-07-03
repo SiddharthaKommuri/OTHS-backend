@@ -13,9 +13,6 @@ public class JpaAuditingConfig {
 
     @Bean
     public AuditorAware<String> auditorProvider() {
-        return () -> Optional.of("system"); 
-        
-
-
+        return () -> Optional.of("system");
     }
 }

@@ -23,7 +23,7 @@ import jakarta.validation.constraints.NotNull;
 
 @RestController
 @RequestMapping("/api/reviews")
-@CrossOrigin
+//@CrossOrigin
 public class ReviewController {
 	private static final Logger logger = LoggerFactory.getLogger(ReviewController.class);
 	private ReviewService reviewServiceImpl;

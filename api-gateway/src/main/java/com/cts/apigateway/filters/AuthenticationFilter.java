@@ -72,7 +72,14 @@ public class AuthenticationFilter implements GatewayFilterFactory<Authentication
             }
 
             String role = jwtUtil.getRoles(token); // should return comma-separated roles like "ADMIN,TRAVELER"
+            String username = jwtUtil.extractUsername(token); // Extract username
+            Long userId = jwtUtil.extractUserId(token); // Extract userId
+            String contactNumber = jwtUtil.extractContactNumber(token); // Extract contactNumber
+
             logger.debug("Extracted Roles from token: {}", role);
+            logger.debug("Extracted User ID from token: {}", userId);
+            logger.debug("Extracted Contact Number from token: {}", contactNumber);
+
 
             if (config.getRequiredRoles() != null) {
                 List<String> requiredRoles = Arrays.asList(config.getRequiredRoles().split(","));
@@ -86,14 +93,23 @@ public class AuthenticationFilter implements GatewayFilterFactory<Authentication
                 }
             }
 
-            String username = jwtUtil.extractUsername(token);
-            logger.info("Authenticated user: {}, roles: {}", username, role);
+            logger.info("Authenticated user: {}, roles: {}, userId: {}, contactNumber: {}", username, role, userId, contactNumber);
 
-            ServerHttpRequest mutated = request.mutate()
+            // Mutate the request to add custom headers for downstream services
+            ServerHttpRequest.Builder mutatedRequestBuilder = request.mutate()
                     .header("X-User", username)
                     .header("X-Role", role)
-                    .header("Authorization", "Bearer " + token)
-                    .build();
+                    .header("Authorization", "Bearer " + token); // Keep the Authorization header if needed downstream
+
+            // Add new headers for userId and contactNumber
+            if (userId != null) {
+                mutatedRequestBuilder.header("X-User-Id", String.valueOf(userId));
+            }
+            if (contactNumber != null) {
+                mutatedRequestBuilder.header("X-Contact-Number", contactNumber);
+            }
+
+            ServerHttpRequest mutated = mutatedRequestBuilder.build();
 
             return chain.filter(exchange.mutate().request(mutated).build());
         };
