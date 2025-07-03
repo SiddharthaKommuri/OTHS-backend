@@ -12,7 +12,7 @@ import com.cts.booking.util.AppConstants;
 
 import jakarta.validation.Valid;
 
-@CrossOrigin
+//@CrossOrigin
 @RestController
 @RequestMapping("api/v1/bookings")
 public class BookingController {

@@ -30,4 +30,7 @@ public class TravelPackageDto {
 	@NotNull(message = "Price cannot be null")
 	@DecimalMin(value = "0.0", inclusive = false, message = "Price must be greater than zero")
 	private BigDecimal price;
+
+	private String createdBy; // This is the user ID of the agent who created the package
+	private String status;
 }

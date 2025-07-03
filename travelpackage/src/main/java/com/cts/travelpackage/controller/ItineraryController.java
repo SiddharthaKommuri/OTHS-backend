@@ -16,7 +16,7 @@ import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("api/v1/itineraries")
-@CrossOrigin
+//@CrossOrigin
 public class ItineraryController {
 	
 	private ItineraryService itineraryService;

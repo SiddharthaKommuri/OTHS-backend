@@ -15,7 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 @RestController
 @RequestMapping("api/v1/packages")
 @Slf4j
-@CrossOrigin
+//@CrossOrigin
 public class PackageController {
 
 	private PackageService packageService;
