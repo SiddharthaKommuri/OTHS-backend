@@ -30,29 +30,29 @@ import lombok.NoArgsConstructor;
 @Table(name = "package")
 @EnableJpaAuditing
 public class TravelPackage extends Auditable<String>{
-	
+
 	@Id
 	@Column(name="packageId")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long packageId;
-	
+
 	@Column(name="packageName")
 	private String packageName;
-	
+
+	@Column(name="location") // NEW: Add location column
+	private String location; // NEW: Add location field
+
 	@ElementCollection
 	private List<Long> includedHotelIds;
 
 	@ElementCollection
 	private List<Long> includedFlightIds;
-	
+
 	@ElementCollection
 	private List<String> activities;
-	
+
 	private BigDecimal price;
-	
 
 	@OneToMany(mappedBy = "travelPackage", cascade = CascadeType.ALL)
 	private List<Itinerary> itineraries;
-
-	
 }
