@@ -4,6 +4,7 @@ import com.cts.authentication.JwtUtil;
 import com.cts.authentication.CustomUserDetailsService;
 import com.cts.authentication.dto.AuthRequest;
 import com.cts.authentication.dto.RegisterRequest;
+import com.cts.authentication.dto.UserDto;
 import com.cts.authentication.entity.User;
 import com.cts.authentication.exception.ApiException;
 import com.cts.authentication.exception.InvalidPasswordException;
@@ -16,10 +17,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Service implementation for user-related operations, including authentication, registration,
@@ -229,5 +228,52 @@ public class UserServiceImpl implements UserService {
         }
         jwtBlacklistService.invalidateToken(token);
         logger.info("Token blacklisted successfully.");
+    }
+
+    /**
+     * Retrieves all users from the database.
+     *
+     * @return A list of {@link UserDto} representing all users.
+     */
+    @Override
+    public List<UserDto> getAllUsers() {
+        List<User> users = userRepository.findAll();
+        return users.stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * Retrieves a user by their ID.
+     *
+     * @param userId The ID of the user to retrieve.
+     * @return A {@link UserDto} representing the found user.
+     * @throws UserNotFoundException if no user is found with the given ID.
+     */
+    @Override
+    public UserDto getUserById(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException("User not found with ID: " + userId));
+        return convertToDto(user);
+    }
+
+    /**
+     * Helper method to convert a User entity to a UserDto.
+     *
+     * @param user The User entity to convert.
+     * @return The corresponding UserDto.
+     */
+    private UserDto convertToDto(User user) {
+        return UserDto.builder()
+                .userId(user.getUserId())
+                .name(user.getName())
+                .email(user.getEmail())
+                .role(user.getRole())
+                .contactNumber(user.getContactNumber())
+                .createdAt(user.getCreatedAt())
+                .updatedAt(user.getUpdatedAt())
+                .createdBy(user.getCreatedBy())
+                .updatedBy(user.getUpdatedBy())
+                .build();
     }
 }

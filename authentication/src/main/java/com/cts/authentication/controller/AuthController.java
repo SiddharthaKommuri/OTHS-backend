@@ -1,10 +1,6 @@
 package com.cts.authentication.controller;
 
-import com.cts.authentication.dto.AuthRequest;
-import com.cts.authentication.dto.ChangePasswordRequest;
-import com.cts.authentication.dto.ForgotPasswordRequest;
-import com.cts.authentication.dto.RegisterRequest;
-import com.cts.authentication.dto.ResetPasswordRequest;
+import com.cts.authentication.dto.*;
 import com.cts.authentication.service.UserService;
 import com.cts.authentication.exception.ApiException;
 import com.cts.authentication.exception.InvalidPasswordException;
@@ -20,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.List;
 import java.util.Map; // Keep Map import as service still returns Map
 
 /**
@@ -34,6 +31,8 @@ public class AuthController {
 
     @Autowired
     private UserService userService;
+
+
 
     /**
      * Handles user login requests.
@@ -283,6 +282,75 @@ public class AuthController {
             logger.error("An unexpected error occurred during logout: {}", e.getMessage(), e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
                 RestResponse.error(HttpStatus.INTERNAL_SERVER_ERROR.value(), Map.of("error", "An unexpected error occurred during logout."))
+            );
+        }
+    }
+    /**
+     * Fetches all registered users.
+     * This endpoint is typically restricted to administrators.
+     *
+     * @return A {@link ResponseEntity} containing a {@link RestResponse} with a list of {@link UserDto} objects or an error message.
+     * <ul>
+     * <li>{@code HttpStatus.OK} (200) with the list of users.</li>
+     * <li>{@code HttpStatus.INTERNAL_SERVER_ERROR} (500) for unexpected errors.</li>
+     * </ul>
+     */
+    @GetMapping("/users")
+    // Changed the generic type of RestResponse from List<UserDto> to Object
+    // because the error case returns Map<String, String> as its data payload.
+    public ResponseEntity<RestResponse<Object>> getAllUsers() {
+        logger.info("Received request to fetch all users.");
+        try {
+            List<UserDto> users = userService.getAllUsers();
+            logger.info("Successfully fetched {} users.", users.size());
+            // For success, data is List<UserDto>, which is compatible with Object
+            return ResponseEntity.ok(
+                    RestResponse.success(HttpStatus.OK.value(), users)
+            );
+        } catch (Exception e) {
+            logger.error("An unexpected error occurred while fetching all users: {}", e.getMessage(), e);
+            // For error, data is Map<String, String>, which is compatible with Object
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
+                    RestResponse.error(HttpStatus.INTERNAL_SERVER_ERROR.value(), Map.of("error", "An unexpected error occurred while fetching users."))
+            );
+        }
+    }
+
+    /**
+     * Fetches a user by their unique ID.
+     * This endpoint is typically restricted to administrators or the user themselves.
+     *
+     * @param userId The ID of the user to fetch.
+     * @return A {@link ResponseEntity} containing a {@link RestResponse} with the {@link UserDto} object or an error message.
+     * <ul>
+     * <li>{@code HttpStatus.OK} (200) with the user details.</li>
+     * <li>{@code HttpStatus.NOT_FOUND} (404) if no user is found with the given ID.</li>
+     * <li>{@code HttpStatus.INTERNAL_SERVER_ERROR} (500) for unexpected errors.</li>
+     * </ul>
+     */
+    @GetMapping("/users/{userId}")
+    // Changed the generic type of RestResponse from UserDto to Object
+    // because the error case returns Map<String, String> as its data payload.
+    public ResponseEntity<RestResponse<Object>> getUserById(@PathVariable Long userId) {
+        logger.info("Received request to fetch user with ID: {}", userId);
+        try {
+            UserDto user = userService.getUserById(userId);
+            logger.info("Successfully fetched user with ID: {}", userId);
+            // For success, data is UserDto, which is compatible with Object
+            return ResponseEntity.ok(
+                    RestResponse.success(HttpStatus.OK.value(), user)
+            );
+        } catch (UserNotFoundException e) {
+            logger.warn("User not found with ID {}. Details: {}", userId, e.getMessage());
+            // For error, data is Map<String, String>, which is compatible with Object
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+                    RestResponse.error(HttpStatus.NOT_FOUND.value(), Map.of("error", e.getMessage()))
+            );
+        } catch (Exception e) {
+            logger.error("An unexpected error occurred while fetching user with ID {}: {}", userId, e.getMessage(), e);
+            // For error, data is Map<String, String>, which is compatible with Object
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
+                    RestResponse.error(HttpStatus.INTERNAL_SERVER_ERROR.value(), Map.of("error", "An unexpected error occurred while fetching the user."))
             );
         }
     }
