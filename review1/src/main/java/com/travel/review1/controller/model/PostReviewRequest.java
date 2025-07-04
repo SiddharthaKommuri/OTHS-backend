@@ -13,9 +13,9 @@ import lombok.NoArgsConstructor;
 public class PostReviewRequest {
 
 	@NotNull(message = "User Id is required")
-	private Integer userId;
-	private Integer hotelId;
-	private Integer flightId;
+	private Long userId;
+	private Long hotelId;
+	private Long flightId;
 
 	@NotNull(message = "Rating is required")
 	private Integer rating;

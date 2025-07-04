@@ -8,17 +8,17 @@ import lombok.Data;
 @Data
 @Builder
 public class ReviewDTO {
-	
-	 private Integer reviewId;
-	    private Integer userId;
-	    private Integer hotelId;
-	    private Integer flightId;
-	    private Integer rating;
-	    private String comment;
-	    private LocalDateTime timestamp;
-	    private LocalDateTime createdDate;
-	    private String createdBy;
-	    private LocalDateTime updatedDate;
-	    private String updatedBy;
+
+	private Long reviewId;
+	private Long userId;
+	private Long hotelId;
+	private Long flightId;
+	private Integer rating;
+	private String comment;
+	private LocalDateTime timestamp;
+	private LocalDateTime createdDate;
+	private String createdBy;
+	private LocalDateTime updatedDate;
+	private String updatedBy;
 
 }

@@ -6,11 +6,11 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.travel.review1.entity.Review;
 
-public interface ReviewRepository extends JpaRepository<Review, Integer> {
-	List<Review> findByUserId(Integer userId);
+public interface ReviewRepository extends JpaRepository<Review, Long> {
+	List<Review> findByUserId(Long userId);
 	 
-    List<Review> findByHotelId(Integer hotelId);
+    List<Review> findByHotelId(Long hotelId);
  
-    List<Review> findByFlightId(Integer flightId);
+    List<Review> findByFlightId(Long flightId);
 
 }

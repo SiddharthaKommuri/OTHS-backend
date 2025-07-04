@@ -7,7 +7,8 @@ import com.travel.review1.dto.ReviewDTO;
 public interface ReviewService {
 
 	List<ReviewDTO> getAllReviews();
-	List<ReviewDTO> getHotelReviews(Integer hotelId);
-	List<ReviewDTO> getFlightReviews(Integer flightId);
+	List<ReviewDTO> getHotelReviews(Long hotelId);   // Changed from Integer to Long
+	List<ReviewDTO> getFlightReviews(Long flightId); // Changed from Integer to Long
 	ReviewDTO postReview(ReviewDTO reviewDTO);
+	List<ReviewDTO> getReviewsByUserId(Long userId); // Already Long, keeping it
 }

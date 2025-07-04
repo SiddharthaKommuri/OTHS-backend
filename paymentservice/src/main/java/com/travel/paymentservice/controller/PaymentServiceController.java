@@ -17,7 +17,7 @@ import com.travel.paymentservice.service.PaymentServiceServiceImpl;
 import jakarta.validation.Valid;
 
 @RestController
-@CrossOrigin
+//@CrossOrigin
 @RequestMapping("/api/payments")
 public class PaymentServiceController {
 

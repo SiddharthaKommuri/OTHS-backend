@@ -22,7 +22,7 @@ import com.cts.SupportTicket.service.SupportTicketService;
 
 @RestController
 @RequestMapping("/api/support-tickets")
-@CrossOrigin
+//@CrossOrigin
 public class SupportTicketController {
 
     private static final Logger logger = LoggerFactory.getLogger(SupportTicketController.class);

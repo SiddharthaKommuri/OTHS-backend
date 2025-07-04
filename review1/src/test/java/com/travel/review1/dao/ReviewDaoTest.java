@@ -22,93 +22,93 @@ import com.travel.review1.repository.ReviewRepository;
 
 public class ReviewDaoTest {
 
-	
 	@InjectMocks
 	private ReviewDao reviewDao;
-	 
+
 	@Mock
 	private ReviewRepository reviewRepository;
-	 
+
 	private Review sampleReview;
-	 
+
 	@BeforeEach
 	void setUp() {
-	    MockitoAnnotations.openMocks(this);
-	 
-	    sampleReview = Review.builder()
-	            .reviewId(1)
-	            .userId(10)
-	            .hotelId(100)
-	            .rating(5)
-	            .comment("Excellent stay")
-	.timestamp(LocalDateTime.now())
-	.createdDate(LocalDateTime.now())
-	.updatedDate(LocalDateTime.now())
-	            .createdBy("10")
-	            .updatedBy("10")
-	            .build();
+		MockitoAnnotations.openMocks(this);
+
+		sampleReview = Review.builder()
+				.reviewId(1L)   // Changed to Long
+				.userId(10L)    // Changed to Long
+				.hotelId(100L)  // Changed to Long
+				.rating(5)
+				.comment("Excellent stay")
+				.timestamp(LocalDateTime.now())
+				.createdDate(LocalDateTime.now())
+				.updatedDate(LocalDateTime.now())
+				.createdBy("10")
+				.updatedBy("10")
+				.build();
 	}
-	 
+
 	@Test
 	void testSaveReview() {
-	when(reviewRepository.save(sampleReview)).thenReturn(sampleReview);
-	    Review saved = reviewDao.saveReview(sampleReview);
-	    assertNotNull(saved);
-	    assertEquals(sampleReview.getReviewId(), saved.getReviewId());
+		when(reviewRepository.save(sampleReview)).thenReturn(sampleReview);
+		Review saved = reviewDao.saveReview(sampleReview);
+		assertNotNull(saved);
+		assertEquals(sampleReview.getReviewId(), saved.getReviewId());
 	}
-	 
+
 	@Test
 	void testGetReviewById_Found() {
-	    when(reviewRepository.findById(1)).thenReturn(Optional.of(sampleReview));
-	    Optional<Review> result = reviewDao.getReviewById(1);
-	    assertTrue(result.isPresent());
-	    assertEquals(10, result.get().getUserId());
+		when(reviewRepository.findById(1L)).thenReturn(Optional.of(sampleReview)); // Changed to Long
+		Optional<Review> result = reviewDao.getReviewById(1L); // Changed to Long
+		assertTrue(result.isPresent());
+		assertEquals(10L, result.get().getUserId()); // Changed to Long
 	}
-	 
+
 	@Test
 	void testGetReviewById_NotFound() {
-	    when(reviewRepository.findById(99)).thenReturn(Optional.empty());
-	    Optional<Review> result = reviewDao.getReviewById(99);
-	    assertTrue(result.isEmpty());
+		when(reviewRepository.findById(99L)).thenReturn(Optional.empty()); // Changed to Long
+		Optional<Review> result = reviewDao.getReviewById(99L); // Changed to Long
+		assertTrue(result.isEmpty());
 	}
-	 
+
 	@Test
 	void testGetAllReviews() {
-	    when(reviewRepository.findAll()).thenReturn(Arrays.asList(sampleReview));
-	    List<Review> result = reviewDao.getAllReviews();
-	    assertEquals(1, result.size());
+		when(reviewRepository.findAll()).thenReturn(Arrays.asList(sampleReview));
+		List<Review> result = reviewDao.getAllReviews();
+		assertEquals(1, result.size());
 	}
-	 
+
 	@Test
 	void testGetReviewsByUserId() {
-	    when(reviewRepository.findByUserId(10)).thenReturn(List.of(sampleReview));
-	    List<Review> result = reviewDao.getReviewsByUserId(10);
-	    assertEquals(1, result.size());
+		when(reviewRepository.findByUserId(10L)).thenReturn(List.of(sampleReview)); // Changed to Long
+		List<Review> result = reviewDao.getReviewsByUserId(10L); // Changed to Long
+		assertEquals(1, result.size());
 	}
-	 
+
 	@Test
 	void testGetReviewsByHotelId() {
-	    when(reviewRepository.findByHotelId(100)).thenReturn(List.of(sampleReview));
-	    List<Review> result = reviewDao.getReviewsByHotelId(100);
-	    assertEquals(1, result.size());
+		when(reviewRepository.findByHotelId(100L)).thenReturn(List.of(sampleReview)); // Changed to Long
+		List<Review> result = reviewDao.getReviewsByHotelId(100L); // Changed to Long
+		assertEquals(1, result.size());
 	}
-	 
+
 	@Test
 	void testGetReviewsByFlightId() {
-	    when(reviewRepository.findByFlightId(200)).thenReturn(List.of(sampleReview));
-	    List<Review> result = reviewDao.getReviewsByFlightId(200);
-	    assertEquals(1, result.size());
+		// Assuming a flight ID of 200L for testing purposes
+		when(reviewRepository.findByFlightId(200L)).thenReturn(List.of(sampleReview)); // Changed to Long
+		List<Review> result = reviewDao.getReviewsByFlightId(200L); // Changed to Long
+		assertEquals(1, result.size());
 	}
-	 
+
 	@Test
 	void testExistsById_True() {
-	    when(reviewRepository.existsById(1)).thenReturn(true);
-	    assertTrue(reviewDao.existsById(1));
+		when(reviewRepository.existsById(1L)).thenReturn(true); // Changed to Long
+		assertTrue(reviewDao.existsById(1L)); // Changed to Long
 	}
-	 
+
 	@Test
 	void testExistsById_False() {
-	    when(reviewRepository.existsById(2)).thenReturn(false);
-	    assertFalse(reviewDao.existsById(2));
+		when(reviewRepository.existsById(2L)).thenReturn(false); // Changed to Long
+		assertFalse(reviewDao.existsById(2L)); // Changed to Long
 	}
 }
