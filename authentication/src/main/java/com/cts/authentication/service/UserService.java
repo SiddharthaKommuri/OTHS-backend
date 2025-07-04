@@ -2,6 +2,9 @@ package com.cts.authentication.service;
 
 import com.cts.authentication.dto.AuthRequest;
 import com.cts.authentication.dto.RegisterRequest;
+import com.cts.authentication.dto.UserDto;
+
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -61,4 +64,7 @@ public interface UserService {
      * @param token The JWT token to be invalidated.
      */
     void logout(String token);
+
+    List<UserDto> getAllUsers();
+    UserDto getUserById(Long userId);
 }
