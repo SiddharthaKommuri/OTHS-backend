@@ -111,13 +111,13 @@ public class PackageController {
 	/**
 	 * Deletes a travel package by its ID.
 	 *
-	 * @param id the package ID to delete
+	 * @param id the package ID
 	 * @return a response indicating success or failure
 	 */
-	@DeleteMapping("/{id}") // NEW Endpoint
-	public ResponseEntity<String> deletePackageById(@PathVariable(name="id") Long id) {
+	@DeleteMapping("/{id}")
+	public ResponseEntity<String> deletePackageById(@PathVariable(name = "id") Long id) {
 		log.info("Received request to delete travel package with ID: {}", id);
 		packageService.deletePackageById(id);
-		return new ResponseEntity<>("Travel package deleted successfully.", HttpStatus.OK);
+		return new ResponseEntity<>("Travel Package deleted successfully!", HttpStatus.OK);
 	}
 }

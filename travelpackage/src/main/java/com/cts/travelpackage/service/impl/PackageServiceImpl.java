@@ -153,14 +153,13 @@ public class PackageServiceImpl implements PackageService{
 	}
 
 	/**
-	 * NEW: Method to delete a travel package by its ID.
+	 * Deletes a travel package by its ID.
+	 * {@inheritDoc}
 	 */
-	@Override // This @Override was missing in your provided code
+	@Override
 	public void deletePackageById(Long id) {
-		// Check if the package exists before deleting
 		TravelPackage travelPackage = packageRepository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("TravelPackage", "id", id));
-
 		packageRepository.delete(travelPackage);
 		logger.info("Deleted package with ID: {}", id);
 	}
