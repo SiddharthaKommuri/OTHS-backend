@@ -86,12 +86,22 @@ public class FlightServiceImpl implements FlightService {
     @Override
     public List<Flight> searchFlights(String departure, String arrival) {
         logger.info("Searching flights from '{}' to '{}'", departure, arrival);
-        List<Flight> flights = flightRepo.findByDepartureAndArrival(departure, arrival);
+        List<Flight> flights;
+
+        if (departure == null || departure.trim().isEmpty()) {
+            // This will now call findByArrivalIgnoreCase
+            flights = flightRepo.findByArrivalIgnoreCase(arrival);
+            logger.info("Searching by arrival only. Found {} flights to '{}'", flights.size(), arrival);
+        } else {
+            // This will now call findByDepartureIgnoreCaseAndArrivalIgnoreCase
+            flights = flightRepo.findByDepartureIgnoreCaseAndArrivalIgnoreCase(departure, arrival);
+            logger.info("Searching by departure and arrival. Found {} flights from '{}' to '{}'", flights.size(), departure, arrival);
+        }
+
         if (flights.isEmpty()) {
             logger.warn("No flights found for route: {} -> {}", departure, arrival);
-            throw new RuntimeException("No flights found for this route");
+            return flights;
         }
-        logger.info("Flights found for route: {} -> {}", departure, arrival);
         return flights;
     }
 

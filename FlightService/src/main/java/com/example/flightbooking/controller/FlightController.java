@@ -57,10 +57,13 @@ public class FlightController {
         return flightService.getAllFlights();
     }
 
+    // Modified FlightController.java for optional departure
     @GetMapping("/search")
-    @Operation(summary = "Search Flights by Route")
-    public List<Flight> searchFlights(@RequestParam String departure, @RequestParam String arrival) {
-        logger.info("Searching flights from {} to {}", departure, arrival);
+    public List<Flight> searchFlights(
+            @RequestParam(required = false) String departure, // Make departure optional
+            @RequestParam String arrival) {
+        logger.info("Searching flights from {} to {}", departure != null ? departure : "any departure", arrival);
+        // You would then modify flightService.searchFlights to handle a null or empty departure string appropriately
         return flightService.searchFlights(departure, arrival);
     }
 

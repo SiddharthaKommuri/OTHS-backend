@@ -6,5 +6,6 @@ import java.util.List;
 
 public interface FlightRepository extends JpaRepository<Flight, Integer> {
     List<Flight> findByAirlineIgnoreCase(String airline);
-    List<Flight> findByDepartureAndArrival(String departure, String arrival);
+    List<Flight> findByDepartureIgnoreCaseAndArrivalIgnoreCase(String departure, String arrival);
+    List<Flight> findByArrivalIgnoreCase(String arrival); // NEW: Method to search only by arrival
 }
