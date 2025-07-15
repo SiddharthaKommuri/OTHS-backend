@@ -12,6 +12,8 @@ import com.cts.booking.util.AppConstants;
 
 import jakarta.validation.Valid;
 
+import java.util.ArrayList;
+
 //@CrossOrigin
 @RestController
 @RequestMapping("api/v1/bookings")

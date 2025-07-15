@@ -38,7 +38,7 @@ public class AuthenticationFilter implements GatewayFilterFactory<Authentication
     }
 
     public static class Config {
-        private String requiredRoles; // ✅ FIXED: match with properties key
+        private String requiredRoles;
 
         public String getRequiredRoles() {
             return requiredRoles;
